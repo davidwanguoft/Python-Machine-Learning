@@ -7,7 +7,7 @@ Created on Wed Feb 21 16:16:23 2018
 
 import pandas as pd 
 import quandl, math
-quandl.ApiConfig.api_key = 'YHG3DXPrhWVauLWxjDeN'
+quandl.ApiConfig.api_key = 'REDACTED'
 import numpy as np
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
