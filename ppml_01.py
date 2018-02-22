@@ -2,12 +2,12 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Feb 21 16:16:23 2018
-
 @author: dwang
 """
 
 import pandas as pd 
 import quandl, math
+quandl.ApiConfig.api_key = 'YHG3DXPrhWVauLWxjDeN'
 import numpy as np
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
@@ -16,6 +16,7 @@ import datetime
 import matplotlib.pyplot as plt
 from matplotlib import style
 style.use('ggplot')
+import pickle
 
 df = quandl.get("WIKI/GOOGL")
 
@@ -48,10 +49,19 @@ y = np.array(df['label']) #labels
 # 20% test group size
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
-clf = LinearRegression(n_jobs=1) # use all available threads
-clf.fit(X_train, y_train)
-confidence = clf.score(X_test, y_test)
-print("Confidence score: ",confidence)
+# 2. COMMENT THIS PART OUT AFTER PICKLED; SERIALIZED CLASSIFIER SAVED
+#clf = LinearRegression(n_jobs=1) # use all available threads
+#clf.fit(X_train, y_train)
+#confidence = clf.score(X_test, y_test)
+#print("Confidence score: ",confidence)
+
+# 1. to pickle the classifier above; comment out once pickle file is generated
+#with open('linearregression.pickle','wb') as f:
+#    pickle.dump(clf, f)
+
+# 2. load classifier in via pickle; classifier above is no longer needed since it's been serialized
+pickle_in = open('linearregression.pickle','rb')
+clf = pickle.load(pickle_in)
 
 forecast_set = clf.predict(X_lately)
 df['Forecast'] = np.nan # will populate later
@@ -69,6 +79,13 @@ for i in forecast_set:
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)]+[i]
 
 
+df['Adj. Close'].plot()
+df['Forecast'].plot()
+plt.legend(loc=4)
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.show()
+
 
 '''
 # testconfidence
@@ -77,7 +94,5 @@ for k in ['linear','poly','rbf','sigmoid']:
     clf.fit(X_train, y_train)
     confidence = clf.score(X_test, y_test)
     print (k, confidence)
-
 #clf = svm.SVR() # https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html
 ''' 
-
