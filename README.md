@@ -1,2 +1,4 @@
 # Python-Machine-Learning
-Learning syntax for ML algorithms in Python; some MATLAB first-principles implementations.
+Learning syntax for ML algorithms in Python
+
+Some MATLAB first-principles implementations.
